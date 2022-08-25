@@ -48,6 +48,11 @@ typedef struct {
 	signed char appcursor; /* application cursor */
 } Key;
 
+typedef enum {
+	PixelGeometry,
+	CellGeometry
+} Geometry;
+
 /* Undercurl slope types */
 enum undercurl_slope_type {
 	UNDERCURL_SLOPE_ASCENDING = 0,
@@ -1278,7 +1283,7 @@ xicdestroy(XIC xim, XPointer client, XPointer call)
 }
 
 void
-xinit(int cols, int rows)
+xinit(int w, int h)
 {
 	XGCValues gcvalues;
 	Cursor cursor;
@@ -1306,8 +1311,16 @@ xinit(int cols, int rows)
 	xloadcols();
 
 	/* adjust fixed window geometry */
-	win.w = 2 * win.hborderpx + 2 * borderpx + cols * win.cw;
-	win.h = 2 * win.vborderpx + 2 * borderpx + rows * win.ch;
+	switch (geometry) {
+	case CellGeometry:
+		win.w = 2 * win.hborderpx + 2 * borderpx + cols * win.cw;
+		win.h = 2 * win.vborderpx + 2 * borderpx + rows * win.ch;
+		break;
+	case PixelGeometry:
+		win.w = w;
+		win.h = h;
+		break;
+	}
 	if (xw.gm & XNegative)
 		xw.l += DisplayWidth(xw.dpy, xw.scr) - win.w - 2;
 	if (xw.gm & YNegative)
@@ -3066,6 +3079,12 @@ main(int argc, char *argv[])
 	case 'g':
 		xw.gm = XParseGeometry(EARGF(usage()),
 				&xw.l, &xw.t, &cols, &rows);
+		geometry = CellGeometry;
+		break;
+	case 'G':
+		xw.gm = XParseGeometry(EARGF(usage()),
+				&xw.l, &xw.t, &width, &height);
+		geometry = PixelGeometry;
 		break;
 	case 'i':
 		xw.isfixed = 1;
@@ -3104,6 +3123,16 @@ run:
 	XSetLocaleModifiers("");
 	xrdb_load();
 	signal(SIGUSR1, reload);
+	switch (geometry) {
+	case CellGeometry:
+		xinit(cols, rows);
+		break;
+	case PixelGeometry:
+		xinit(width, height);
+		cols = (win.w - 2 * borderpx) / win.cw;
+		rows = (win.h - 2 * borderpx) / win.ch;
+		break;
+	}
 	cols = MAX(cols, 1);
 	rows = MAX(rows, 1);
 	tnew(cols, rows);
