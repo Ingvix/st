@@ -234,6 +234,11 @@ static uint forcemousemod = ShiftMask;
 #include "autocomplete.h"
 
 /*
+ * Command used to query unicode glyphs.
+ */
+char *iso14755_cmd = "dmenu -w \"$WINDOWID\" -p codepoint: </dev/null";
+
+/*
  * Internal mouse shortcuts.
  * Beware that overloading Button1 will disable the selection.
  */
@@ -276,6 +281,7 @@ static Shortcut shortcuts[] = {
 	{ ACMPL_MOD,            XK_bracketright,autocomplete,   { .i = ACMPL_WWORD       } },
 	{ ACMPL_MOD,            XK_bracketleft, autocomplete,   { .i = ACMPL_FUZZY_WWORD } },
 	{ ACMPL_MOD,            XK_equal,       autocomplete,   { .i = ACMPL_UNDO        } },
+	{ TERMMOD,              XK_I,           iso14755,       {.i =  0} },
 };
 
 /*
