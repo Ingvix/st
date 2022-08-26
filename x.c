@@ -3150,7 +3150,6 @@ run:
 	cols = MAX(cols, 1);
 	rows = MAX(rows, 1);
 	tnew(cols, rows);
-	xinit(cols, rows);
 	bginit();
 	xsetenv();
 	selinit();
