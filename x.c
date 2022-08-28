@@ -3037,6 +3037,8 @@ xrdb_load(void)
 void
 reload(int sig)
 {
+	XFreeGC(xw.dpy, xw.bggc);
+	bginit();
 	xrdb_load();
 
 	/* colors, fonts */
