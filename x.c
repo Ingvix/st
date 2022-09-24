@@ -2499,8 +2499,10 @@ cachemonitorinfo()
 	int prev_num = monitors_num;
 	MonitorInfo *prev_info = monitors_info;
 	XRRMonitorInfo *xmonitors = XRRGetMonitors(xw.dpy, XRootWindow(xw.dpy, xw.scr), 1, &monitors_num);
-	if (!monitors_num)
-		die("xrandr found no monitors");
+	if (!monitors_num) {
+		perror("xrandr found no monitors");
+		return;
+	}
 
 	monitors_info = xmalloc(monitors_num * sizeof(MonitorInfo));
 
