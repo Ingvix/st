@@ -1804,24 +1804,16 @@ xdrawglyphfontspecs(const XftGlyphFontSpec *specs, Glyph base, int len, int x, i
     }
 
     if (dmode & DRAW_FG) {
-        /* Render the glyphs. */
 		if (bg == &dc.col[defaultbg])
 			xclear(winx, winy, winx + width, winy + win.ch);
 		else
-			XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
+			XftDrawRect(xw.draw, bg, winx, winy, width, win.ch);
 
-        /* Render underline and strikethrough. */
-        if (base.mode & ATTR_UNDERLINE) {
-            XftDrawRect(xw.draw, fg, winx, winy + dc.font.ascent + 1,
-                        width, 1);
-        }
-
-		if (base.mode & ATTR_BOXDRAW) {
+		if (base.mode & ATTR_BOXDRAW)
 			drawboxes(winx, winy, width / len, win.ch, fg, bg, specs, len);
-		} else {
+		else
 			/* Render the glyphs. */
 			XftDrawGlyphFontSpec(xw.draw, fg, specs, len);
-		}
 
 		/* Render underline and strikethrough. */
 		if (base.mode & ATTR_UNDERLINE) {
