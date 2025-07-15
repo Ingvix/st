@@ -26,8 +26,12 @@ MonitorConfig monitors_config[] = {
 	//   >0 : auto absolute pixel size (monitor dpi)
 	//   <0 : auto relative points size (monitor dpi)
 	// {"DP-1", 0}, // BUG:(size=0): not restored to default after back'n'forth
-	{"DP-1.2", 12},
-	{"eDP-1-1", 24},
+	{"DP-1-1.2", 13},
+	{"DP-1.2",   13},
+	{"DP-1.2_1", 13},
+	{"DP-1.2_2", 13},
+	{"DP-1.2_3", 13},
+	{"eDP-1",    13},
 };
 float winmovethreshold = 0.6;
 
